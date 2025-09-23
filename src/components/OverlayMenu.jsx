@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
 
+const asset = (p) => `${import.meta.env.BASE_URL}${p.replace(/^\//, '')}`
+
 export default function OverlayMenu({ open, onClose }) {
   return (
     <div className={`overlay ${open ? 'open' : ''}`}>
-      <button className="overlay-close" onClick={onClose} aria-label="Close menu" />
+      <button className="overlay-close" onClick={onClose} aria-label="Close menu">
+        <img src={asset('navOn.png')} alt="close" />
+      </button>
       <div className="overlay-inner">
         <nav className="menu-list">
           <Link to="/" onClick={onClose}>回首頁</Link>

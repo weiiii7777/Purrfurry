@@ -9,12 +9,15 @@ import Member from './pages/Member.jsx'
 import OverlayMenu from './components/OverlayMenu.jsx'
 import EventDetail from './pages/EventDetail.jsx'
 
+// Helper to resolve assets under Vite base
+const asset = (p) => `${import.meta.env.BASE_URL}${p.replace(/^\//, '')}`
+
 function Landing({ menuOpen }) {
   const navigate = useNavigate()
   const cards = [
-    { id: 'adopt-brief', image: '/adopt1.webp', title: '領養說明會', date: '09.27', year: '2025', weekday: 'Sat.', place: '台北市信義區動物之家' },
-    { id: 'meet-cats', image: '/adopt1.webp', title: '貓咪見面會', date: '10.12', year: '2025', weekday: 'Sun.', place: '新北市板橋動物之家' },
-    { id: 'volunteer-brief', image: '/adopt1.webp', title: '收容志工說明', date: '11.02', year: '2025', weekday: 'Sun.', place: '台中市動物之家' },
+    { id: 'adopt-brief', image: 'adopt1.webp', title: '領養說明會', date: '09.27', year: '2025', weekday: 'Sat.', place: '台北市信義區動物之家' },
+    { id: 'meet-cats', image: 'adopt1.webp', title: '貓咪見面會', date: '10.12', year: '2025', weekday: 'Sun.', place: '新北市板橋動物之家' },
+    { id: 'volunteer-brief', image: 'adopt1.webp', title: '收容志工說明', date: '11.02', year: '2025', weekday: 'Sun.', place: '台中市動物之家' },
   ]
 
   // Scroll-driven logo movement toward header-left
@@ -111,11 +114,11 @@ function Landing({ menuOpen }) {
     <>
     <div className="landing">
       <div className="left-title">
-        <img src="/index_title.png" alt="index title vertical" />
+        <img src={asset('index_title.png')} alt="index title vertical" />
       </div>
       <div className="center-logo">
         <div className="logo-wrap">
-          <img ref={logoRef} style={logoStyle} className="noise_animation" src="/b_logo.png" alt="main logo" />
+          <img ref={logoRef} style={logoStyle} className="noise_animation" src={asset('b_logo.png')} alt="main logo" />
         </div>
       </div>
       <div className="right-card">
@@ -131,7 +134,7 @@ function Landing({ menuOpen }) {
             setEnableAnim(true); setIsMoving(true); setPos((v) => v + 1)
           }}>
             <i className='bx bx-chevron-right'></i>
-          </button>
+        </button>
           <div className="event-viewport">
             <div
               className={`event-track${!enableAnim ? ' no-anim' : ''}`}
@@ -188,7 +191,7 @@ function Landing({ menuOpen }) {
                 <div className="event-slide" key={i} aria-hidden={i !== pos}>
                   <div className="event-inner">
                     <div className="event-image-wrap clickable" onClick={() => navigate(`/event/${item.id}`)}>
-                      <img className="event-image" src={item.image} alt="adopt event" draggable="false" />
+                      <img className="event-image" src={asset(item.image)} alt="adopt event" draggable="false" />
                     </div>
                     <div className="event-content clickable" onClick={() => navigate(`/event/${item.id}`)}>
                       <h3>{item.title}</h3>
@@ -228,15 +231,15 @@ function Landing({ menuOpen }) {
           <p>在透明毛襪，你能安心地了解每一份紀錄，慢慢找到屬於你們的緣分。</p>
           <p>完成問答，看看我們推薦你的領養關鍵字。</p>
           <button className="btn-outline">開始填寫問卷</button>
-          <img className="intro-illus illus-person" src="/index_adopt.svg" alt="插畫" />
+          <img className="intro-illus illus-person" src={asset('index_adopt.svg')} alt="插畫" />
         </div>
       </div>
     </section>
     <section className="feature feature-edu">
       <div className="feature-container">
         <div className="feature-media">
-          <img className="feature-bg" src="/index_1_b.png" alt="" aria-hidden="true" />
-          <img className="feature-img" src="/index_1.png" alt="教育功能插圖" />
+          <img className="feature-bg" src={asset('index_1_b.png')} alt="" aria-hidden="true" />
+          <img className="feature-img" src={asset('index_1.png')} alt="教育功能插圖" />
         </div>
         <div className="feature-copy">
           <div className="feature-titleline">
@@ -262,8 +265,8 @@ function Landing({ menuOpen }) {
           <button className="btn-outline">進入此頁</button>
         </div>
         <div className="feature-media">
-          <img className="feature-bg" src="/index_2_b.png" alt="" aria-hidden="true" />
-          <img className="feature-img" src="/index_2.png" alt="領養介面插圖" />
+          <img className="feature-bg" src={asset('index_2_b.png')} alt="" aria-hidden="true" />
+          <img className="feature-img" src={asset('index_2.png')} alt="領養介面插圖" />
         </div>
       </div>
     </section>
@@ -271,8 +274,8 @@ function Landing({ menuOpen }) {
     <section className="feature feature-report">
       <div className="feature-container">
         <div className="feature-media">
-          <img className="feature-bg" src="/index_3_b.png" alt="" aria-hidden="true" />
-          <img className="feature-img" src="/index_3.png" alt="回報系統插圖" />
+          <img className="feature-bg" src={asset('index_3_b.png')} alt="" aria-hidden="true" />
+          <img className="feature-img" src={asset('index_3.png')} alt="回報系統插圖" />
         </div>
         <div className="feature-copy">
           <div className="feature-titleline">
@@ -313,7 +316,7 @@ function App() {
       {!menuOpen && (
         <div id="header-bar" className="fixed-top-right">
           <button className="hamburger" onClick={() => setMenuOpen(true)} aria-label="Open menu">
-            <img src="/navOff.png" alt="menu" />
+            <img src={asset('navOff.png')} alt="menu" />
           </button>
         </div>
       )}

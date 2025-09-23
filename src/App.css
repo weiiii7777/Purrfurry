@@ -336,11 +336,12 @@ html, body, #root {
   right: 1rem;
   width: 6.25rem;
   height: 6.25rem;
-  background: transparent url('/navOn.png') center/contain no-repeat;
+  background: transparent;
   border: none;
   cursor: pointer;
   z-index: 2;
 }
+.overlay-close img { width: 100%; height: 100%; object-fit: contain; }
 
 .menu-list {
   display: flex;
