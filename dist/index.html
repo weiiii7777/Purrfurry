@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-hant-tw">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/b_logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <title>Purrfurry</title>
+    <script type="module" crossorigin src="/assets/index-Btbvap-C.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DcI5CtIi.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Inline SVG filters for noise animation -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="position:fixed; left:-9999px; width:0; height:0; pointer-events:none; visibility:hidden">
+      <defs>
+        <!-- Displacement-only noise: subtle pixel jitter without overlay look -->
+        <filter id="noise-0" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="11" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="noise-1" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="1.30" numOctaves="1" seed="22" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="noise-2" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.80" numOctaves="1" seed="33" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="noise-3" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="1" seed="44" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="noise-4" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.88" numOctaves="1" seed="55" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+  </body>
+</html>
