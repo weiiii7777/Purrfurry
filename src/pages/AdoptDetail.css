@@ -1,0 +1,163 @@
+/* 回上一頁按鈕容器 */
+.adopt-back-container {
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 101;
+}
+
+/* 回上一頁按鈕 */
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  color: #495057;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: #e9ecef;
+  border-color: #dee2e6;
+  color: #212529;
+  transform: translateY(-1px);
+}
+
+.back-button:active {
+  transform: translateY(0);
+}
+
+.back-button i {
+  font-size: 1.1rem;
+}
+
+.adopt-detail { padding: 0rem 1.5rem 4rem; }
+.detail-grid { --g: 2rem; display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: 'title title' 'media panels'; gap: var(--g); max-width: 80rem; margin: 0 auto; align-items: start; }
+.title-row { grid-area: title; }
+.media-col { grid-area: media; }
+.right-panels { grid-area: panels; align-self: start; }
+.main-photo { width: 100%; }
+/* 將右側面板與主圖左緣對齊：以主圖寬度作為參考，縮小面板的內側間距 */
+.left-media,
+.right-panels { padding-left: 0; }
+.left-media .title { margin-left: 0; }
+.right-panels .panel { margin-left: 0; }
+.left-media .title { margin: 0 0 1rem; font-size: 1.25rem; }
+.main-photo img { width: 100%; height: auto; object-fit: cover; aspect-ratio: 4 / 3; display: block; border-radius: 0; }
+.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
+.thumb { border: 0; padding: 0; background: transparent; cursor: pointer; }
+.thumb img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; border: 2px solid transparent; }
+.thumb.selected img { border-color: #000; }
+.foster-card { margin-top: 1.25rem; border: 1px solid #e6e6e6; border-radius: 12px; background: #fff; padding: 1rem; display: grid; grid-template-columns: 56px 1fr auto; gap: 0.75rem; align-items: center; }
+.avatar { width: 56px; height: 56px; border-radius: 50%; background: #eaeaea; overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.foster-name { font-weight: 600; }
+.foster-desc { color: #777; font-size: 0.925rem; }
+.btn-outline.small { padding: 0.5rem 1rem; font-size: 0.95rem; border-radius: 9999px; }
+
+/* bio on next row separated by a hairline */
+.foster-bio-sep { grid-column: 1 / -1; height: 1px; background: #e6e6e6; margin-top: 0.5rem; }
+.foster-bio { grid-column: 1 / -1; padding-top: 0.5rem; color: #444; }
+
+.panel { border: 1px solid #eceae7; background: #f7f5f2; border-radius: 8px; padding: 1rem; }
+.panel + .panel { margin-top: 1rem; }
+.panel-title { font-weight: 700; font-size: 1.125rem; margin: 0 0 0.75rem; display: flex; align-items: center; gap: 0.5rem; background: none; border: none; padding: 0; cursor: pointer; }
+.chev { transition: transform 180ms ease; }
+.chev.open { transform: rotate(180deg); }
+.panel.collapsed .rows { display: none; }
+.rows { display: grid; gap: 0.75rem; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.cell { height: 56px; background: #fff; border: 1px solid #e6e6e6; border-radius: 6px; }
+.cell.wide { grid-column: 1 / -1; }
+
+/* 操作按鈕區域 */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-favorite, .btn-adopt {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-favorite {
+  background: #fff;
+  color: #000;
+}
+
+.btn-favorite:hover {
+  background: #000;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.btn-adopt {
+  background: #000;
+  color: #fff;
+}
+
+.btn-adopt:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+.bio-section { display: none; }
+
+@media (max-width: 960px) {
+  .detail-grid { grid-template-columns: 1fr; grid-template-areas: 'title' 'media' 'panels'; }
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .btn-favorite, .btn-adopt {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* 狀態標籤樣式 */
+.status-tag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-tag.adopted {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.status-tag.available {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+

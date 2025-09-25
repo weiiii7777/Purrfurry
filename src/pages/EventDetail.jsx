@@ -5,17 +5,17 @@ const asset = (p) => `${import.meta.env.BASE_URL}${p.replace(/^\//, '')}`
 const MOCK = {
   'adopt-brief': {
     title: '領養說明會',
-    image: 'adopt1.webp',
+    image: 'adopt1.png',
     date: '09.27', year: '2025', weekday: 'Sat.', place: '台北市信義區動物之家'
   },
   'meet-cats': {
     title: '貓咪見面會',
-    image: 'adopt1.webp',
+    image: 'adopt2.png',
     date: '10.12', year: '2025', weekday: 'Sun.', place: '新北市板橋動物之家'
   },
   'volunteer-brief': {
     title: '收容志工說明',
-    image: 'adopt1.webp',
+    image: 'adopt3.png',
     date: '11.02', year: '2025', weekday: 'Sun.', place: '台中市動物之家'
   }
 }

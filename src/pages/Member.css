@@ -1,0 +1,431 @@
+.member-page { display: grid; grid-template-columns: 16rem 1fr; gap: 1.5rem; padding: 2rem 1.5rem 3rem; min-height: calc(100vh - var(--header-h)); }
+.member-sidebar { border: 1px solid #e6e6e6; border-radius: 12px; background: #fff; padding: 1rem; height: fit-content; }
+.profile { display: grid; gap: 0.5rem; justify-items: center; margin-bottom: 1rem; }
+.profile .avatar { width: 64px; height: 64px; border-radius: 9999px; background: #000; color: #fff; display: grid; place-items: center; font-weight: 700; overflow: hidden; position: relative; }
+.profile .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; top: 0; left: 0; }
+.profile .email { color: #666; font-size: 0.9rem; }
+.w-full { width: 100%; }
+.member-nav { display: grid; gap: 0.375rem; }
+.member-nav button { text-align: left; border: 1px solid #e6e6e6; background: #fff; border-radius: 10px; padding: 0.5rem 0.75rem; cursor: pointer; }
+.member-nav button.active { border-color: #000; }
+.member-content { border: 1px solid #e6e6e6; border-radius: 12px; background: #fff; padding: 1rem; }
+.panel { background: #fff; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; align-items: start; }
+.form-grid label { display: grid; gap: 0.375rem; }
+.form-grid input, .form-grid select, .form-grid textarea { border: 1px solid #ddd; border-radius: 10px; padding: 0.5rem 0.75rem; }
+.form-grid .wide { grid-column: 1 / -1; }
+.form-grid.read > div { display: grid; gap: 0.25rem; }
+.form-grid.read .actions { display: flex; justify-content: flex-start; }
+.form-grid .actions { display: flex; gap: 0.5rem; }
+
+/* Make buttons smaller in member page */
+.member-page .btn-outline { padding: 0.6rem 1rem; font-size: 1rem; border-radius: 40px; }
+
+/* avatar styles */
+.avatar-preview, .avatar-empty { width: 64px; height: 64px; border-radius: 9999px; background: #e6e6e6; overflow: hidden; }
+.avatar-empty { background: linear-gradient(135deg, #eaeaea, #dcdcdc); position: relative; }
+.avatar-empty::after { content: ''; position: absolute; inset: 24% 30% 30% 30%; border-radius: 9999px; border: 2px solid #c8c8c8; border-top-color: transparent; }
+.avatar-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.avatar-edit { display: flex; align-items: center; gap: 0.75rem; }
+.avatar-field strong { margin-bottom: 0.25rem; display: inline-block; }
+.upload-btn { cursor: pointer; }
+
+/* 頭像預覽容器 */
+.avatar-preview-container { 
+  position: relative; 
+  display: inline-block; 
+}
+
+/* 頭像刪除按鈕 */
+.avatar-delete-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ff4444;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.avatar-preview-container:hover .avatar-delete-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.avatar-delete-btn:hover {
+  background: #cc3333;
+  transform: scale(1.1);
+}
+.hint { margin-top: 0.25rem; font-size: 0.875rem; color: #666; }
+.hint.error { color: #c43; }
+
+/* simple inline cropper */
+.cropper-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: grid; place-items: center; z-index: 2000; }
+.cropper-modal { background: #fff; padding: 1rem; border-radius: 12px; width: min(92vw, 520px); }
+.cropper-box { position: relative; width: 300px; height: 300px; margin: 0 auto; overflow: hidden; border-radius: 9999px; border: 1px solid #ddd; background: #f7f7f7; touch-action: none; }
+.cropper-box img { user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.cropper-mask { position: absolute; inset: 0; border-radius: 9999px; pointer-events: none; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.2) inset; }
+.cropper-controls { display: grid; gap: 0.75rem; margin-top: 0.75rem; }
+.cropper-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+
+/* 留言板樣式 */
+.messages-list { display: grid; gap: 1rem; }
+.conversation-item { 
+  border: 1px solid #e6e6e6; 
+  border-radius: 12px; 
+  padding: 1rem; 
+  background: #fff;
+  transition: box-shadow 0.2s;
+}
+.conversation-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.conversation-header { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.75rem; 
+  margin-bottom: 0.75rem; 
+}
+.conversation-avatar { 
+  width: 48px; 
+  height: 48px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+}
+.conversation-info h3 { 
+  margin: 0; 
+  font-size: 1rem; 
+  font-weight: 600; 
+}
+.conversation-pet { 
+  margin: 0.25rem 0 0 0; 
+  font-size: 0.875rem; 
+  color: #666; 
+}
+.conversation-time { 
+  margin: 0; 
+  font-size: 0.75rem; 
+  color: #999; 
+}
+.conversation-preview { 
+  margin-bottom: 0.75rem; 
+  padding: 0.5rem; 
+  background: #f8f9fa; 
+  border-radius: 8px; 
+}
+.conversation-preview p { 
+  margin: 0; 
+  font-size: 0.875rem; 
+  color: #555; 
+  line-height: 1.4; 
+}
+.empty-state { 
+  text-align: center; 
+  padding: 2rem; 
+  color: #666; 
+}
+.empty-state p { 
+  margin: 0.5rem 0; 
+}
+
+/* 追蹤頁面樣式 */
+.tracking-list {
+  margin-top: 1rem;
+}
+
+.tracked-pets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.tracked-pet-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tracked-pet-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #000;
+}
+
+.tracked-pet-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.pet-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.pet-info p {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.btn-remove {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.btn-remove:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+/* 認養頁面樣式 */
+.adoption-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.filter-btn:hover {
+  border-color: #000;
+  background: #f8f8f8;
+}
+
+.filter-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.adoption-list {
+  margin-top: 1rem;
+}
+
+.adopted-pets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.adopted-pet-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adopted-pet-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #000;
+}
+
+.adopted-pet-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.adopted-pet-card .pet-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.adopted-pet-card .pet-info p {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.adopted-pet-card .btn-remove {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.adopted-pet-card .btn-remove:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.status-badge.adopted {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* 出養頁面樣式 */
+.listings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-post-adoption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn-post-adoption:hover {
+  background: #333;
+}
+
+.listings-content {
+  padding: 0;
+}
+
+.empty-state {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  margin: 0.5rem 0;
+}
+
+.empty-hint {
+  font-size: 0.9rem;
+  color: #999;
+}
+
+/* 出養記錄統計樣式 */
+.listing-description {
+  margin: 0.5rem 0;
+  color: #555;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.listing-stats {
+  display: flex;
+  gap: 1rem;
+  margin: 0.5rem 0;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.listing-stats span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.listing-stats i {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 960px) { 
+  .member-page { grid-template-columns: 1fr; }
+  
+  .listings-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .btn-post-adoption {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+

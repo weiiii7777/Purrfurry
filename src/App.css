@@ -4,6 +4,8 @@
   --header-h: 6.25rem; /* 100px fixed header (hamburger row) */
   --landing-min-h: 36rem; /* min landing height */
   --landing-max-h: 54rem; /* max landing height */
+  --page-x: 1rem; /* horizontal page gutter */
+  --nav-w: 6.25rem; /* hamburger visual width for safe gutter */
 }
 
 html, body, #root {
@@ -15,17 +17,23 @@ html, body, #root {
   background: var(--bg);
   color: var(--ink);
   padding-top: 6.25rem; /* reserve 100px header space for hamburger row */
+  padding-left: max(var(--page-x), var(--nav-w));
+  padding-right: max(var(--page-x), var(--nav-w));
 }
+/* remove body scroll lock on app-root; handled via body inline styles in App.jsx */
 
 .landing {
   position: relative;
   /* occupy viewport height (vh) minus fixed header, content centered inside */
   height: calc(100vh - var(--header-h));
   display: grid;
-  grid-template-columns: 2.5rem auto minmax(15rem, 1fr) minmax(0, 40rem); /* gutter | left | center min (logo 15rem) | right max 40rem */
+  grid-template-columns: auto minmax(15rem, 1fr) minmax(0, 40rem); /* left | center min (logo 15rem) | right max 40rem */
   column-gap: 1.5rem; /* 24px */
   align-items: center;
   overflow-x: hidden;
+  /* Exempt right page gutter so the event carousel touches the viewport edge */
+  margin-right: calc(-1 * max(var(--page-x), var(--nav-w)));
+  padding-right: 0;
 }
 
 .intro-section { padding: 3rem 1.5rem 4rem; }
@@ -49,8 +57,8 @@ html, body, #root {
 }
 .btn-outline {
   margin-top: 1.25rem;
-  padding: 1.25rem 2.5rem; /* 20px 40px */
-  font-size: 1.25rem; /* 20px */
+  padding: 0.875rem 1.75rem; /* 14px 28px - 縮小內邊距 */
+  font-size: 1rem; /* 16px - 縮小字體 */
   border: 2px solid #C7C7C7;
   background: transparent;
   border-radius: 50px;
@@ -58,8 +66,15 @@ html, body, #root {
   cursor: pointer;
   transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 140ms ease;
   will-change: transform;
+  display: inline-flex; /* normalize <a> and <button> */
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; /* remove underline for <a> */
+  vertical-align: middle; /* avoid baseline shift */
+  box-sizing: border-box;
 }
-.btn-outline:hover { background: #000; color: #fff; border-color: #000; transform: scale(1.03); }
+.btn-outline:link, .btn-outline:visited { text-decoration: none; color: var(--ink); }
+.btn-outline:hover { background: #000; color: #fff; border-color: #000; transform: scale(1.03); text-decoration: none; }
 .btn-outline:active { transform: scale(0.985); }
 
 /* Back-to-top button */
@@ -99,12 +114,23 @@ html, body, #root {
 .feature-sub { font-size: 1.25rem; margin: 0 0 1rem; }
 .feature-desc { margin: 0 0 1rem; line-height: 1.8; }
 
+/* Scroll-in animations */
+.slide-from-left, .slide-from-right { opacity: 0; transform: translateX(0); transition: transform 600ms ease, opacity 600ms ease; }
+.slide-from-left { transform: translateX(-48px); }
+.slide-from-right { transform: translateX(48px); }
+.slide-in { opacity: 1; transform: translateX(0); }
+.feature-media.slide-from-left { transition-delay: 80ms; }
+.feature-copy.slide-from-left { transition-delay: 160ms; }
+.feature-media.slide-from-right { transition-delay: 80ms; }
+.feature-copy.slide-from-right { transition-delay: 160ms; }
+
+/* Adopt page styles moved to src/pages/Adopt.css */
 .left-title {
-  grid-column: 2; /* second track (left content) */
+  grid-column: 1; /* first track (left content) */
   position: static;
   justify-self: start;
   align-self: center;
-  margin-left: 0; /* gutter handled by first track */
+  margin-left: 0;
 }
 .left-title img {
   width: 6.25rem; /* 100px */
@@ -112,14 +138,14 @@ html, body, #root {
 }
 
 .center-logo {
-  grid-column: 3; /* center block */
+  grid-column: 2; /* center block */
   display: flex;
   justify-content: center; /* center within the spanned space */
   position: relative;
   min-width: 0; /* allow middle track to shrink without overflow pushing right off-screen */
 }
 .right-card {
-  grid-column: 4; /* right block */
+  grid-column: 3; /* right block */
   display: flex;
   justify-content: flex-start;
   position: relative;
@@ -291,7 +317,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 1rem;
+  padding: 0 var(--page-x);
   z-index: 3;
   pointer-events: none; /* let only the button receive events */
 }
@@ -308,20 +334,55 @@ html, body, #root {
   height: 6.25rem;
 }
 
+/* slot for animated logo to attach when pinned */
+#header-logo-slot { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); z-index: 3; display: flex; align-items: center; height: 100%; overflow: visible; }
+.header-home-link { display: inline-flex; align-items: center; height: 100%; pointer-events: auto; cursor: pointer; }
+.header-home-link img { height: 70%; width: auto; display: block; }
+
 /* Overlay menu */
 .overlay {
   position: fixed;
-  inset: 0;
+  inset: -1px; /* stretch 1px to avoid hairline gaps during rubber-band scroll */
   background: var(--bg);
   pointer-events: none;
   opacity: 0;
   transition: opacity 200ms ease;
   z-index: 1000;
 }
+.overlay:not(.open) { display: none; }
 .overlay.open {
   opacity: 1;
   pointer-events: auto;
 }
+.overlay-toolbar { position: absolute; top: 0; left: 0; right: 0; height: 6.25rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0 1rem; z-index: 2; pointer-events: none; }
+.overlay-right { display: flex; align-items: center; gap: 0.5rem; pointer-events: auto; }
+.overlay-right .overlay-auth-btn { position: relative; z-index: 3; }
+.overlay-right .overlay-close { position: relative; z-index: 2; }
+.overlay-toolbar .overlay-auth-btn,
+.overlay-toolbar .overlay-close,
+.overlay-toolbar .user-trigger,
+.overlay-toolbar .user-menu,
+.overlay-toolbar .overlay-logo { pointer-events: auto; }
+.overlay-logo { display: inline-flex; align-items: center; height: 100%; }
+.overlay-logo img { height: 70%; width: auto; display: block; }
+.overlay-auth-btn { border: 1px solid #000; padding: 0.375rem 0.625rem; border-radius: 9999px; text-decoration: none; color: #000; background: #fff; font-size: 0.875rem; transform: translate(8px, 4px); }
+.overlay-user { position: relative; }
+.user-trigger { display: inline-flex; align-items: center; gap: 0.5rem; background: #fff; border: 1px solid #000; border-radius: 9999px; padding: 0.375rem 0.75rem; cursor: pointer; }
+.user-trigger .avatar { width: 1.75rem; height: 1.75rem; border-radius: 9999px; background: #000; color: #fff; display: inline-block; overflow: hidden; }
+.user-trigger .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 9999px; }
+.avatar-mini-empty { width: 100%; height: 100%; background: linear-gradient(135deg, #eaeaea, #dcdcdc); border-radius: 9999px; display: block; position: relative; }
+.avatar-mini-empty::after { content: ''; position: absolute; inset: 20% 28% 28% 28%; border-radius: 9999px; border: 2px solid #c8c8c8; border-top-color: transparent; }
+.user-trigger .uname { max-width: 8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-menu { position: absolute; top: 3rem; right: 0; left: auto; background: #fff; border: 1px solid #e6e6e6; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); z-index: 1; }
+.user-menu button { 
+  width: 100%; 
+  text-align: left; 
+  background: transparent; 
+  border: none; 
+  padding: 0.5rem 1rem; 
+  cursor: pointer; 
+}
+.bx.rot { transform: rotate(180deg); transition: transform 160ms ease; }
 .overlay-inner {
   position: absolute;
   inset: 0;
@@ -329,6 +390,14 @@ html, body, #root {
   background: var(--bg);
   padding: 4rem 3rem; /* 64px 48px */
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: none;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .overlay-close {
   position: absolute;
@@ -346,7 +415,8 @@ html, body, #root {
 .menu-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem; /* 12px */
+  gap: 0.5rem;
+  width: min(42rem, 90vw);
 }
 .menu-list h3 {
   margin: 1.5rem 0 0.5rem; /* 24px 0 8px */
@@ -355,8 +425,18 @@ html, body, #root {
   color: var(--ink);
   text-decoration: none;
   font-size: 1.125rem; /* 18px */
+  line-height: 1.9;
 }
 .menu-list a:hover { text-decoration: underline; }
+
+/* section heading style */
+.menu-list .menu-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-top: 1.5rem;
+  line-height: 1.2;
+}
+
 
 .page {
   min-height: 100vh;
