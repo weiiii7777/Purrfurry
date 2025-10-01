@@ -9,8 +9,8 @@ export default function Login() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { login, user, updateUser } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('demo@purrfurry.com')
+  const [password, setPassword] = useState('demo123')
   const [showPwd, setShowPwd] = useState(false)
 
   // 處理登入後的追蹤邏輯
@@ -84,6 +84,7 @@ export default function Login() {
     // 檢查是否有重定向參數
     const redirectUrl = searchParams.get('redirect')
     const action = searchParams.get('action')
+    const tab = searchParams.get('tab')
     
     if (redirectUrl) {
       // 如果有重定向URL，回到原頁面
@@ -101,7 +102,13 @@ export default function Login() {
         // 如果是課程，回到原來的課程頁面
         navigate(redirectUrl)
       } else {
-        navigate(redirectUrl)
+        // 處理一般重定向，如果有 tab 參數則保留
+        if (tab) {
+          const separator = redirectUrl.includes('?') ? '&' : '?'
+          navigate(redirectUrl + separator + `tab=${tab}`)
+        } else {
+          navigate(redirectUrl)
+        }
       }
     } else {
       // 沒有重定向，正常跳轉到會員頁面
@@ -113,6 +120,9 @@ export default function Login() {
     <div className="login-page">
       <div className="login-card">
         <h2 className="login-title">會員登入</h2>
+        <div className="demo-credentials">
+          <p>💡 演示帳號已預填，您也可以自行修改</p>
+        </div>
         <form onSubmit={onSubmit} className="login-form">
           <label className="field">
             <span>電子郵件</span>

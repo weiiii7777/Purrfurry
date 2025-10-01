@@ -36,25 +36,164 @@ html, body, #root {
   padding-right: 0;
 }
 
-.intro-section { padding: 3rem 1.5rem 4rem; }
-.intro-inner { max-width: 56rem; margin: 0 auto; text-align: left; line-height: 1.8; font-size: 1.25rem; color: var(--ink); position: relative; }
-.intro-copy { position: relative; padding-right: 18rem; }
-.intro-copy p { margin: 0.2rem 0; letter-spacing: 0.15em; }
-.intro-illus { width: 250px; height: auto; position: absolute; }
-/* Ball at left of dog */
-.illus-ball { right: 8.5rem; top: 0.5rem; }
-/* Dog centered vertically */
-.illus-dog { right: 3.5rem; top: 2.5rem; }
-/* Person at far right */
-.illus-person { right: -1rem; top: 0.2rem; }
-.intro-inner {
-  max-width: 56rem;
-  margin: 0 auto;
-  /* text-align: center; */
-  line-height: 1.8;
-  font-size: 1.25rem;
-  color: var(--ink);
+/* RWD: 保護活動資料卡不被壓縮 */
+@media (max-width: 1200px) {
+  .landing {
+    grid-template-columns: auto 1fr minmax(320px, 40rem); /* 確保右側卡片最小寬度 320px */
+  }
 }
+
+/* 左側標題文字樣式 - 直式排列 */
+.left-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.title-text {
+  text-align: left;
+  line-height: 1.2;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.title-year {
+  font-size: 1.2rem;
+  color: #000;
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+.title-main {
+  font-size: 1.2rem;
+  color: #000;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Logo 顯示邏輯 */
+
+/* 大螢幕：顯示中央 logo，隱藏 header logo */
+@media (min-width: 1201px) {
+  .center-logo {
+    display: flex;
+  }
+  
+  #header-logo-slot {
+    display: none;
+  }
+}
+
+/* 小螢幕：隱藏中央 logo，顯示 header logo */
+@media (max-width: 1200px) {
+  .center-logo {
+    display: none !important;
+  }
+  
+  #header-logo-slot {
+    display: flex !important;
+  }
+}
+
+/* 當螢幕縮小時，調整活動資料卡為窄長方形 */
+@media (max-width: 1000px) {
+  .event-card {
+    aspect-ratio: 400 / 300; /* 更窄的長方形比例 */
+    border-radius: 1rem 0 0 1rem; /* 調整圓角 */
+    padding: clamp(1rem, 2vw, 1.5rem); /* 減少內邊距 */
+  }
+  
+  .landing {
+    grid-template-columns: auto 1fr minmax(280px, 35rem); /* 減少右側卡片最小寬度 */
+  }
+  
+  /* 問卷部分中等屏幕調整 */
+  .intro-copy {
+    padding-right: 10rem;
+  }
+  
+  .intro-illus {
+    width: clamp(120px, 15vw, 200px);
+  }
+  
+  .illus-person {
+    right: 1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .event-card {
+    aspect-ratio: 350 / 250; /* 更窄的長方形 */
+    border-radius: 0.75rem 0 0 0.75rem;
+    padding: clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+  
+  /* 問卷部分RWD調整 */
+  .intro-section {
+    padding: 2rem 1rem 3rem;
+  }
+  
+  .intro-inner {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+  }
+  
+  .intro-copy {
+    padding-right: 0;
+    text-align: left; /* 保持文字置左對齊 */
+  }
+  
+  .intro-illus {
+    position: relative;
+    width: clamp(100px, 25vw, 200px);
+    margin: 0.8rem auto 0;
+    display: block;
+  }
+  
+  .illus-person {
+    right: auto;
+    top: auto;
+  }
+}
+  
+  .landing {
+    grid-template-columns: auto 1fr minmax(250px, 30rem); /* 進一步減少寬度 */
+  }
+
+.intro-section { padding: 3rem 1.5rem 4rem; }
+.intro-inner { 
+  max-width: 56rem; 
+  margin: 0 auto; 
+  text-align: left; 
+  line-height: 1.8; 
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem); /* 字體大小隨畫面縮小 */
+  color: var(--ink); 
+  position: relative; 
+}
+.intro-copy { position: relative; padding-right: 14rem; /* 從10rem調整到14rem，給圖片和文字適當距離 */ }
+.intro-copy p { 
+  margin: 0.2rem 0; 
+  letter-spacing: 0.15em; 
+  /* 添加響應式縮放 */
+  margin: clamp(0.1rem, 0.5vw, 0.2rem) 0; /* 間距隨畫面縮小 */
+  letter-spacing: clamp(0.1em, 0.3vw, 0.15em); /* 字間距隨畫面縮小 */
+}
+.intro-illus { 
+  width: 250px; 
+  height: auto; 
+  position: absolute; 
+  max-width: 100%; /* 確保圖片不會超出容器 */
+  object-fit: contain; /* 保持圖片比例 */
+  /* 添加響應式縮放 */
+  width: clamp(150px, 20vw, 250px); /* 使用clamp讓圖片自然縮放 */
+}
+/* Ball at left of dog */
+.illus-ball { right: 9rem; top: 0.5rem; }
+/* Dog centered vertically */
+.illus-dog { right: 6rem; top: 2.5rem; }
+/* Person at far right */
+.illus-person { right: 0rem; top: 0.2rem; }
 .btn-outline {
   margin-top: 1.25rem;
   padding: 0.875rem 1.75rem; /* 14px 28px - 縮小內邊距 */
@@ -328,6 +467,8 @@ html, body, #root {
   padding: 0;
   cursor: pointer;
   pointer-events: auto;
+  position: relative;
+  z-index: 10;
 }
 .hamburger img {
   width: 6.25rem; /* 100px */
@@ -335,9 +476,27 @@ html, body, #root {
 }
 
 /* slot for animated logo to attach when pinned */
-#header-logo-slot { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); z-index: 3; display: flex; align-items: center; height: 100%; overflow: visible; }
+#header-logo-slot { 
+  display: none;
+  align-items: center;
+  height: 100%;
+  pointer-events: auto;
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  order: -1; /* 確保在左邊 */
+}
 .header-home-link { display: inline-flex; align-items: center; height: 100%; pointer-events: auto; cursor: pointer; }
-.header-home-link img { height: 70%; width: auto; display: block; }
+.header-home-link img { 
+  height: 70%; 
+  width: auto; 
+  display: block; 
+  transform: none !important; 
+  animation: none !important;
+  transition: none !important;
+}
 
 /* Overlay menu */
 .overlay {
@@ -364,6 +523,18 @@ html, body, #root {
 .overlay-toolbar .user-menu,
 .overlay-toolbar .overlay-logo { pointer-events: auto; }
 .overlay-logo { display: inline-flex; align-items: center; height: 100%; }
+
+/* 在大螢幕時隱藏 overlay logo，避免與中央 logo 衝突 */
+/* 但當漢堡選單開啟時，應該顯示 overlay logo */
+@media (min-width: 1201px) {
+  .overlay.open .overlay-logo {
+    display: inline-flex !important;
+  }
+  
+  .overlay:not(.open) .overlay-logo {
+    display: none !important;
+  }
+}
 .overlay-logo img { height: 70%; width: auto; display: block; }
 .overlay-auth-btn { border: 1px solid #000; padding: 0.375rem 0.625rem; border-radius: 9999px; text-decoration: none; color: #000; background: #fff; font-size: 0.875rem; transform: translate(8px, 4px); }
 .overlay-user { position: relative; }
@@ -450,3 +621,29 @@ html, body, #root {
 
 /* Layout reflow (no scaling): switch to stacked layout when space is tight */
 /* remove reflow for now per request */
+
+/* Footer */
+.app-footer {
+  height: 100px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: #F1ECE5;
+  border-top: 1px solid #e9ecef;
+  margin-top: auto;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  padding: 0 var(--page-x);
+  box-sizing: border-box;
+}
+
+.app-footer p {
+  font-size: 12px;
+  color: #000;
+  margin: 0 0 20px 0;
+  text-align: center;
+}

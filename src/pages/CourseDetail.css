@@ -30,9 +30,7 @@
   background: #fff;
   border-bottom: 1px solid #e9ecef;
   padding: 1rem 1.5rem;
-  position: sticky;
-  top: 0;
-  z-index: 101;
+  /* 移除 sticky 效果 */
 }
 
 /* 回上一頁按鈕 */
@@ -307,14 +305,20 @@
 
 /* 響應式設計 */
 @media (max-width: 1024px) {
-  .course-content {
+  .course-detail-content {
     grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto; /* 視頻在上，章節列表在下 */
   }
   
   .course-sidebar {
     border-left: none;
     border-top: 1px solid #e9ecef;
     max-height: 400px;
+    order: 2; /* 章節列表排在第二個 */
+  }
+  
+  .video-section {
+    order: 1; /* 視頻區域排在第一個 */
   }
 }
 
@@ -351,5 +355,19 @@
   .tab-btn {
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
+  }
+  
+  /* 移動設備上章節列表優化 */
+  .course-sidebar {
+    padding: 1rem;
+    max-height: 300px; /* 移動設備上限制高度 */
+  }
+  
+  .chapter-header {
+    padding: 0.75rem;
+  }
+  
+  .lesson-item {
+    padding: 0.75rem;
   }
 }

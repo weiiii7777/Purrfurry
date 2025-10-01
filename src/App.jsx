@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { Routes, Route, useNavigate, Link, Navigate, useLocation } from 'react-router-dom'
 import './App.css'
 import Adopt from './pages/Adopt.jsx'
@@ -29,12 +29,194 @@ function Landing({ menuOpen }) {
     { id: 'volunteer-brief', image: 'adopt3.png', title: '收容志工說明', date: '11.02', year: '2025', weekday: 'Sun.', place: '台中市動物之家' },
   ]
 
-  // Scroll-driven logo movement toward header-left
+  // Logo animation states
   const logoRef = useRef(null)
   const [logoStyle, setLogoStyle] = useState({})
   const [pinned, setPinned] = useState(false)
   const [showTop, setShowTop] = useState(false)
+  
+  // 立即檢查並設定 nav logo 顯示
+  const forceShowNavLogo = () => {
+    console.log('Force showing nav logo - immediate check')
+    const currentPath = window.location.pathname
+    const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+    const headerSlot = document.getElementById('header-logo-slot')
+    
+    console.log('Immediate check - path:', currentPath, 'isHomepage:', isHomepage, 'headerSlot exists:', !!headerSlot)
+    
+    // 檢查螢幕大小
+    const currentWidth = window.innerWidth
+    
+    if (currentWidth <= 1200) {
+      // 小螢幕：無論是否首頁都顯示 nav logo
+      if (headerSlot) {
+        console.log('Small screen - forcing nav logo display')
+        headerSlot.style.setProperty('display', 'flex', 'important')
+      }
+    } else if (!isHomepage) {
+      // 大螢幕非首頁：顯示 nav logo
+      if (headerSlot) {
+        console.log('Large screen non-homepage - forcing nav logo display')
+        headerSlot.style.setProperty('display', 'flex', 'important')
+      }
+    } else {
+      // 大螢幕首頁：不強制顯示，讓動畫邏輯處理
+      console.log('Large screen homepage - letting animation logic handle it')
+    }
+    
+    // 額外檢查：如果 headerSlot 存在但被隱藏，強制顯示
+    if (headerSlot) {
+      const currentDisplay = window.getComputedStyle(headerSlot).display
+      if (currentDisplay === 'none' && (!isHomepage || currentWidth <= 1200)) {
+        console.log('Header slot is hidden but should be visible - forcing display')
+        headerSlot.style.setProperty('display', 'flex', 'important')
+      }
+    }
+  }
+  
+  // 在組件掛載時立即執行
+  React.useLayoutEffect(() => {
+    console.log('useLayoutEffect - immediate nav logo check')
+    forceShowNavLogo()
+  }, [])
   useEffect(() => {
+    console.log('useEffect started - setting up logo logic')
+    
+    // 初始設定：根據螢幕大小和頁面決定 logo 顯示
+    const initialSetup = () => {
+      const currentWidth = window.innerWidth
+      const isHomepage = window.location.pathname === '/' || window.location.pathname === '/Purrfurry/' || window.location.pathname.endsWith('/Purrfurry/')
+      
+      console.log('Initial setup - width:', currentWidth, 'isHomepage:', isHomepage)
+      
+      const centerLogo = document.querySelector('.center-logo')
+      const headerSlot = document.getElementById('header-logo-slot')
+      
+      console.log('Elements found - centerLogo:', !!centerLogo, 'headerSlot:', !!headerSlot)
+      
+      if (currentWidth <= 1200) {
+        // 小螢幕：隱藏中央 logo，顯示 header logo
+        console.log('Small screen logic')
+        if (centerLogo) {
+          centerLogo.style.setProperty('display', 'none', 'important')
+        }
+        if (headerSlot) {
+          headerSlot.style.setProperty('display', 'flex', 'important')
+        }
+      } else if (!isHomepage) {
+        // 大螢幕非首頁：隱藏中央 logo，顯示 header logo
+        console.log('Large screen non-homepage logic')
+        if (centerLogo) {
+          centerLogo.style.setProperty('display', 'none', 'important')
+        }
+        if (headerSlot) {
+          headerSlot.style.setProperty('display', 'flex', 'important')
+        }
+      } else {
+        // 大螢幕首頁：顯示中央 logo，隱藏 header logo（等待動畫）
+        console.log('Large screen homepage logic')
+        if (centerLogo) {
+          centerLogo.style.setProperty('display', 'flex', 'important')
+        }
+        if (headerSlot) {
+          headerSlot.style.setProperty('display', 'none', 'important')
+        }
+      }
+      
+      // 如果 centerLogo 不存在，強制顯示 header logo
+      if (!centerLogo && headerSlot) {
+        console.log('Center logo not found, forcing header logo display')
+        headerSlot.style.setProperty('display', 'flex', 'important')
+      }
+    }
+    
+    // 執行初始設定
+    console.log('Running initial setup')
+    initialSetup()
+    
+    // 監聽路由變化，重新設定 logo 顯示
+    const handleRouteChange = () => {
+      console.log('Route changed, re-setting logo display')
+      // 延遲執行，確保 DOM 已更新
+      setTimeout(() => {
+        initialSetup()
+        forceShowNavLogo()
+      }, 100)
+    }
+    
+    // 監聽 popstate 事件（瀏覽器前進/後退）
+    window.addEventListener('popstate', handleRouteChange)
+    
+    // 監聽 pushstate/replacestate（程式化導航）
+    const originalPushState = history.pushState
+    const originalReplaceState = history.replaceState
+    
+    history.pushState = function(...args) {
+      originalPushState.apply(history, args)
+      setTimeout(handleRouteChange, 0)
+    }
+    
+    history.replaceState = function(...args) {
+      originalReplaceState.apply(history, args)
+      setTimeout(handleRouteChange, 0)
+    }
+    
+    // 監聽頁面可見性變化
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log('Page became visible - checking nav logo')
+        setTimeout(() => {
+          forceShowNavLogo()
+        }, 100)
+      }
+    }
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    // 監聽視窗焦點變化
+    const handleFocus = () => {
+      console.log('Window focused - checking nav logo')
+      setTimeout(() => {
+        forceShowNavLogo()
+      }, 100)
+    }
+    
+    window.addEventListener('focus', handleFocus)
+    
+    // 定期檢查 nav logo 顯示狀態（備用方案）
+    console.log('Setting up periodic check')
+    const checkInterval = setInterval(() => {
+      const currentPath = window.location.pathname
+      const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+      const headerSlot = document.getElementById('header-logo-slot')
+      const currentWidth = window.innerWidth
+      
+      console.log('Periodic check - path:', currentPath, 'isHomepage:', isHomepage, 'headerSlot exists:', !!headerSlot, 'width:', currentWidth)
+      
+      // 檢查 nav logo 顯示邏輯
+      if (currentWidth <= 1200) {
+        // 小螢幕：強制顯示 nav logo
+        if (headerSlot) {
+          const currentDisplay = window.getComputedStyle(headerSlot).display
+          if (currentDisplay === 'none') {
+            console.log('Small screen - forcing nav logo display')
+            headerSlot.style.setProperty('display', 'flex', 'important')
+          }
+        }
+      } else if (!isHomepage) {
+        // 大螢幕非首頁：強制顯示 nav logo
+        if (headerSlot) {
+          const currentDisplay = window.getComputedStyle(headerSlot).display
+          if (currentDisplay === 'none') {
+            console.log('Large screen non-homepage - forcing nav logo display')
+            headerSlot.style.setProperty('display', 'flex', 'important')
+          }
+        }
+      } else if (isHomepage) {
+        console.log('Homepage detected, skipping periodic check to avoid interfering with animation')
+      }
+    }, 500) // 每0.5秒檢查一次，更頻繁的檢查
+    
     // IntersectionObserver: reveal features on scroll
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -47,6 +229,7 @@ function Landing({ menuOpen }) {
 
     document.querySelectorAll('.slide-from-left, .slide-from-right').forEach((el) => io.observe(el))
 
+    // Logo animation logic
     const headerEl = document.querySelector('#header-bar')
     const imgEl = logoRef.current
     if (!headerEl || !imgEl) return
@@ -55,10 +238,11 @@ function Landing({ menuOpen }) {
       const headerRect = headerEl.getBoundingClientRect()
       const startRect = imgEl.getBoundingClientRect()
 
-      const targetHeight = headerRect.height * 0.7 // align with header logo slot visual size
+      const targetHeight = headerRect.height * 0.7
       const startH = startRect.height
       const targetScale = targetHeight / startH
 
+      // 計算目標位置：header 的左邊（使用 padding 位置）
       const targetX = headerRect.left + 16 + targetHeight / 2
       const targetY = headerRect.top + headerRect.height / 2
 
@@ -71,41 +255,148 @@ function Landing({ menuOpen }) {
     let vectors = computeVectors()
 
     const apply = () => {
+      const currentWidth = window.innerWidth
+      const isHomepage = window.location.pathname === '/' || window.location.pathname === '/Purrfurry/' || window.location.pathname.endsWith('/Purrfurry/')
+      console.log('apply() called - width:', currentWidth, 'pathname:', window.location.pathname, 'isHomepage:', isHomepage)
+      
+      // 強制檢查並設定 nav logo 顯示
+      const centerLogo = document.querySelector('.center-logo')
+      const headerSlot = document.getElementById('header-logo-slot')
+      
+      // 檢查是否為小螢幕，如果是則不執行動畫
+      // 使用更穩定的寬度檢測
+      console.log('Width check: currentWidth =', currentWidth, 'threshold = 1200')
+      if (currentWidth <= 1200) {
+        console.log('Small screen detected, showing nav logo')
+        setPinned(false)
+        setLogoStyle({ 
+          position: 'static', 
+          width: '', 
+          height: '', 
+          transform: 'none',
+          zIndex: 'auto'
+        })
+        // 小螢幕時：隱藏中央 logo，顯示 header logo
+        if (centerLogo) {
+          centerLogo.style.setProperty('display', 'none', 'important')
+        }
+        if (headerSlot) {
+          headerSlot.style.setProperty('display', 'flex', 'important')
+        }
+        return
+      }
+      
+      console.log('Large screen detected, proceeding with animation')
+      
+      // 大螢幕時，只在首頁執行動畫
+      // 修復路徑判斷：支援 BASE_URL 前綴
+      if (!isHomepage) {
+        console.log('Not on homepage, showing nav logo')
+        setPinned(false)
+        setLogoStyle({})
+        // 其他頁面：隱藏中央 logo，顯示 header logo
+        const centerLogo = document.querySelector('.center-logo')
+        if (centerLogo) {
+          centerLogo.style.setProperty('display', 'none', 'important')
+        }
+        const headerSlot = document.getElementById('header-logo-slot')
+        if (headerSlot) {
+          headerSlot.style.setProperty('display', 'flex', 'important')
+        }
+        return
+      }
+      
+      console.log('Starting animation logic...')
+      
+      // 大螢幕首頁：執行動畫
       const maxDist = Math.max(1, window.innerHeight * 0.6)
       const progress = Math.min(1, Math.max(0, window.scrollY / maxDist))
       const scale = 1 + (vectors.targetScale - 1) * progress
       const tx = vectors.dx * progress
       const ty = vectors.dy * progress
+      
+      // 調試信息
+      console.log('Animation progress:', progress, 'scrollY:', window.scrollY, 'maxDist:', maxDist)
+      console.log('Vectors:', vectors)
+      console.log('Transform:', `translate3d(${tx}px, ${ty}px, 0) scale(${scale})`)
+      
+      // 動畫進行中：顯示中央 logo，隱藏 header logo
       if (progress < 1) {
-        // Ensure logo stays in original container while animating
-        const slot = document.getElementById('header-logo-slot')
-        if (slot && imgEl.parentElement === slot) {
-          const orig = document.querySelector('.center-logo .logo-wrap')
-          if (orig) orig.appendChild(imgEl)
+        const centerLogo = document.querySelector('.center-logo')
+        if (centerLogo) {
+          centerLogo.style.setProperty('display', 'flex', 'important')
         }
-        setPinned(false)
-        setLogoStyle({ position: 'static', width: '', height: '', transform: `translate3d(${tx}px, ${ty}px, 0) scale(${scale})` })
+        const headerSlot = document.getElementById('header-logo-slot')
+        if (headerSlot) {
+          headerSlot.style.setProperty('display', 'none', 'important')
+        }
       } else {
-        // Move logo into header bar slot
-        const slot = document.getElementById('header-logo-slot')
-        if (slot && imgEl.parentElement !== slot) {
-          slot.appendChild(imgEl)
+        // 動畫完成：隱藏中央 logo，顯示 header logo
+        const centerLogo = document.querySelector('.center-logo')
+        if (centerLogo) {
+          centerLogo.style.setProperty('display', 'none', 'important')
         }
-        setPinned(true)
-        setLogoStyle({ position: 'static', width: 'auto', height: `${Math.round(vectors.targetHeight)}px`, transform: 'none' })
+        const headerSlot = document.getElementById('header-logo-slot')
+        if (headerSlot) {
+          headerSlot.style.setProperty('display', 'flex', 'important')
+        }
       }
+      
+      // 簡化邏輯：只使用 transform 動畫，不移動 DOM 元素
+      setPinned(progress >= 1)
+      setLogoStyle({ 
+        position: 'static', 
+        width: '', 
+        height: '', 
+        transform: `translate3d(${tx}px, ${ty}px, 0) scale(${scale})`,
+        zIndex: progress >= 1 ? 1000 : 'auto'
+      })
     }
 
     const onScroll = () => apply()
-    const onResize = () => { vectors = computeVectors(); apply() }
+    const onResize = () => { 
+      vectors = computeVectors(); 
+      apply();
+      // 強制重新應用 CSS 規則
+      setTimeout(() => {
+        const centerLogo = document.querySelector('.center-logo')
+        const headerSlot = document.getElementById('header-logo-slot')
+        
+        if (window.innerWidth <= 1200) {
+          // 小螢幕：隱藏中央 logo，顯示 header logo
+          if (centerLogo) {
+            centerLogo.style.setProperty('display', 'none', 'important')
+          }
+          if (headerSlot) {
+            headerSlot.style.setProperty('display', 'flex', 'important')
+          }
+        } else {
+          // 大螢幕：顯示中央 logo，隱藏 header logo
+          if (centerLogo) {
+            centerLogo.style.setProperty('display', 'flex', 'important')
+          }
+          if (headerSlot) {
+            headerSlot.style.setProperty('display', 'none', 'important')
+          }
+        }
+      }, 100)
+    }
     apply()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onResize)
-      io.disconnect()
-    }
+           return () => {
+             window.removeEventListener('scroll', onScroll)
+             window.removeEventListener('resize', onResize)
+             window.removeEventListener('popstate', handleRouteChange)
+             document.removeEventListener('visibilitychange', handleVisibilityChange)
+             window.removeEventListener('focus', handleFocus)
+             // 恢復原始的 history 方法
+             history.pushState = originalPushState
+             history.replaceState = originalReplaceState
+             // 清除定期檢查
+             clearInterval(checkInterval)
+             io.disconnect()
+           }
   }, [])
 
   // control back-to-top visibility
@@ -145,7 +436,10 @@ function Landing({ menuOpen }) {
     <>
     <div className="landing">
       <div className="left-title">
-        <img src={asset('index_title.png')} alt="index title vertical" />
+        <div className="title-text">
+          <div className="title-year">二零二五年 秋</div>
+          <div className="title-main">透明毛襪 正式上線</div>
+        </div>
       </div>
       <div className="center-logo">
         <div className="logo-wrap">
@@ -320,7 +614,7 @@ function Landing({ menuOpen }) {
           </div>
           <h3 className="feature-sub">分享近況，延續信任</h3>
           <p className="feature-desc">領養後，你可以透過平台回報毛孩的生活日常。這不僅讓愛爸愛媽更安心，也建立起持續的互動，讓整個社群共同見證牠的成長與幸福。</p>
-          <button className="btn-outline">進入此頁</button>
+          <ReportButton />
         </div>
       </div>
     </section>
@@ -339,6 +633,29 @@ function MemberGate({ children }) {
   const { isAuthenticated } = useAuth()
   if (!isAuthenticated) return <Navigate to="/login" replace />
   return children
+}
+
+// 回報按鈕組件，需要 useAuth
+function ReportButton() {
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  
+  return (
+    <button 
+      className="btn-outline"
+      onClick={() => {
+        if (isAuthenticated) {
+          // 已登入：直接跳轉到會員頁的我的回報紀錄
+          navigate('/member?tab=myreports')
+        } else {
+          // 未登入：跳轉到登入頁，登入後重定向到會員頁我的回報紀錄
+          navigate('/login?redirect=/member&tab=myreports')
+        }
+      }}
+    >
+      進入此頁
+    </button>
+  )
 }
 
 function App() {
@@ -377,16 +694,6 @@ function App() {
     }
   }, [menuOpen])
 
-  // Ensure header slot has only one logo on non-home pages
-  useEffect(() => {
-    const slot = document.getElementById('header-logo-slot')
-    if (!slot) return
-    if (location.pathname !== '/') {
-      Array.from(slot.querySelectorAll('img')).forEach((img) => {
-        if (!img.closest('.header-home-link')) img.remove()
-      })
-    }
-  }, [location.pathname])
 
   // Scroll to top on route changes (e.g., entering Adopt from home)
   useEffect(() => {
@@ -426,18 +733,37 @@ function App() {
       {!menuOpen && (
         <div id="header-bar" className="fixed-top-right">
           <div id="header-logo-slot" style={{ pointerEvents: 'auto' }}>
-            {location.pathname !== '/' && (
-              <Link to="/" className="header-home-link">
-                <img src={asset('b_logo.png')} alt="home" />
-              </Link>
-            )}
+            <Link to="/" className="header-home-link">
+              <img src={asset('b_logo.png')} alt="home" />
+            </Link>
           </div>
           <button className="hamburger" onClick={() => setMenuOpen(true)} aria-label="Open menu">
             <img src={asset('navOff.png')} alt="menu" />
           </button>
         </div>
       )}
-      <OverlayMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <OverlayMenu open={menuOpen} onClose={() => {
+        setMenuOpen(false)
+        // 關閉選單後檢查 nav logo 顯示
+        setTimeout(() => {
+          const headerSlot = document.getElementById('header-logo-slot')
+          if (headerSlot) {
+            const currentPath = window.location.pathname
+            const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+            const currentWidth = window.innerWidth
+            
+            if (currentWidth <= 1200 || !isHomepage) {
+              console.log('OverlayMenu closed - forcing nav logo display')
+              headerSlot.style.setProperty('display', 'flex', 'important')
+            }
+          }
+        }, 100)
+      }} />
+      
+      {/* Footer */}
+      <footer className="app-footer">
+        <p>Copyright © 2025 透明毛襪PurrFurry All Rights Reserved.</p>
+      </footer>
     </div>
     </AuthProvider>
   )

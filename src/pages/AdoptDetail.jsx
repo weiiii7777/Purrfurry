@@ -282,9 +282,20 @@ export default function AdoptDetail() {
               基本資料
             </button>
             <div className="rows">
-              <div className="row"><div className="cell"/><div className="cell"/></div>
-              <div className="row"><div className="cell wide"/></div>
-              <div className="row"><div className="cell"/><div className="cell"/></div>
+              <div className="row">
+                <div className="cell">
+                  <div className="label">可能出生日期</div>
+                  <div className="value">2024年3月</div>
+                </div>
+                <div className="cell">
+                  <div className="label">性別</div>
+                  <div className="value">{animalData.description.split(',')[0]}</div>
+                </div>
+                <div className="cell">
+                  <div className="label">介紹</div>
+                  <div className="value">活潑可愛，喜歡與人互動</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -294,9 +305,34 @@ export default function AdoptDetail() {
               檢疫資料
             </button>
             <div className="rows">
-              <div className="row"><div className="cell"/><div className="cell"/></div>
-              <div className="row"><div className="cell"/><div className="cell"/></div>
-              <div className="row"><div className="cell"/><div className="cell"/></div>
+              <div className="row">
+                <div className="cell">
+                  <div className="label">是否結紮</div>
+                  <div className="value">是</div>
+                </div>
+                <div className="cell">
+                  <div className="label">有無愛滋白血</div>
+                  <div className="value">無</div>
+                </div>
+                <div className="cell">
+                  <div className="label">預防針</div>
+                  <div className="value">已完成</div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="cell">
+                  <div className="label">狂犬疫苗</div>
+                  <div className="value">已完成</div>
+                </div>
+                <div className="cell">
+                  <div className="label">基本血檢</div>
+                  <div className="value">正常</div>
+                </div>
+                <div className="cell">
+                  <div className="label">驅蟲</div>
+                  <div className="value">已完成</div>
+                </div>
+              </div>
             </div>
           </div>
           

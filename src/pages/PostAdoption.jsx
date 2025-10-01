@@ -141,7 +141,7 @@ export default function PostAdoption() {
             <i className="bx bx-arrow-back"></i>
             返回
           </button>
-          <h1>刊登出養貓咪</h1>
+          <h1>刊登出養毛孩</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="adoption-form">

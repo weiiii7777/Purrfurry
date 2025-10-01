@@ -138,16 +138,22 @@ export default function CourseDetail() {
 
   // 從 localStorage 載入已完成的課程
   useEffect(() => {
-    const savedCompleted = localStorage.getItem(`course-${id}-completed`)
-    if (savedCompleted) {
-      try {
-        const completedArray = JSON.parse(savedCompleted)
-        setCompletedLessons(new Set(completedArray))
-      } catch (error) {
-        console.error('Error loading completed lessons:', error)
+    // 只有登入用戶才能看到完成狀態
+    if (isAuthenticated) {
+      const savedCompleted = localStorage.getItem(`course-${id}-completed`)
+      if (savedCompleted) {
+        try {
+          const completedArray = JSON.parse(savedCompleted)
+          setCompletedLessons(new Set(completedArray))
+        } catch (error) {
+          console.error('Error loading completed lessons:', error)
+        }
       }
+    } else {
+      // 未登入用戶清空完成狀態
+      setCompletedLessons(new Set())
     }
-  }, [id])
+  }, [id, isAuthenticated])
   const videoRef = useRef(null)
 
   useEffect(() => {

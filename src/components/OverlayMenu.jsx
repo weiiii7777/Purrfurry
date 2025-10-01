@@ -76,24 +76,144 @@ export default function OverlayMenu({ open, onClose }) {
         <nav className="menu-list">
 
           <div className="menu-heading">我要領養</div>
-          <Link to="/courses" onClick={onClose}>教育頁面</Link>
-          <Link to="/adopt" onClick={onClose}>找毛孩</Link>
+          <Link to="/courses" onClick={() => {
+            onClose()
+            setTimeout(() => {
+              const headerSlot = document.getElementById('header-logo-slot')
+              if (headerSlot) {
+                const currentPath = window.location.pathname
+                const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+                const currentWidth = window.innerWidth
+                
+                if (currentWidth <= 1200 || !isHomepage) {
+                  console.log('Navigation to courses - forcing nav logo display')
+                  headerSlot.style.setProperty('display', 'flex', 'important')
+                }
+              }
+            }, 200)
+          }}>教育頁面</Link>
+          <Link to="/adopt" onClick={() => {
+            onClose()
+            setTimeout(() => {
+              const headerSlot = document.getElementById('header-logo-slot')
+              if (headerSlot) {
+                const currentPath = window.location.pathname
+                const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+                const currentWidth = window.innerWidth
+                
+                if (currentWidth <= 1200 || !isHomepage) {
+                  console.log('Navigation to adopt - forcing nav logo display')
+                  headerSlot.style.setProperty('display', 'flex', 'important')
+                }
+              }
+            }, 200)
+          }}>找毛孩</Link>
 
           <div className="menu-heading">關於我們</div>
-          <Link to="/report" onClick={onClose}>常見問題</Link>
+          <Link to="/report" onClick={() => {
+            onClose()
+            setTimeout(() => {
+              const headerSlot = document.getElementById('header-logo-slot')
+              if (headerSlot) {
+                const currentPath = window.location.pathname
+                const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+                const currentWidth = window.innerWidth
+                
+                if (currentWidth <= 1200 || !isHomepage) {
+                  console.log('Navigation to report - forcing nav logo display')
+                  headerSlot.style.setProperty('display', 'flex', 'important')
+                }
+              }
+            }, 200)
+          }}>常見問題</Link>
 
           {isAuthenticated ? (
             <>
               <div className="menu-heading">會員專區</div>
-              <Link to="/member" onClick={onClose}>會員設定</Link>
-              <Link to="/member" onClick={onClose}>我要回報</Link>
-              <Link to="/member" onClick={onClose}>我要發布領養訊息</Link>
+              <Link to="/member?tab=settings" onClick={() => {
+                onClose()
+                setTimeout(() => {
+                  const headerSlot = document.getElementById('header-logo-slot')
+                  if (headerSlot) {
+                    const currentPath = window.location.pathname
+                    const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+                    const currentWidth = window.innerWidth
+                    
+                    if (currentWidth <= 1200 || !isHomepage) {
+                      console.log('Navigation to member settings - forcing nav logo display')
+                      headerSlot.style.setProperty('display', 'flex', 'important')
+                    }
+                  }
+                }, 200)
+              }}>會員設定</Link>
+              <Link to="/member?tab=myreports" onClick={() => {
+                onClose()
+                setTimeout(() => {
+                  const headerSlot = document.getElementById('header-logo-slot')
+                  if (headerSlot) {
+                    const currentPath = window.location.pathname
+                    const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+                    const currentWidth = window.innerWidth
+                    
+                    if (currentWidth <= 1200 || !isHomepage) {
+                      console.log('Navigation to member reports - forcing nav logo display')
+                      headerSlot.style.setProperty('display', 'flex', 'important')
+                    }
+                  }
+                }, 200)
+              }}>我要回報</Link>
+              <Link to="/member?tab=mylistings" onClick={() => {
+                onClose()
+                setTimeout(() => {
+                  const headerSlot = document.getElementById('header-logo-slot')
+                  if (headerSlot) {
+                    const currentPath = window.location.pathname
+                    const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+                    const currentWidth = window.innerWidth
+                    
+                    if (currentWidth <= 1200 || !isHomepage) {
+                      console.log('Navigation to member listings - forcing nav logo display')
+                      headerSlot.style.setProperty('display', 'flex', 'important')
+                    }
+                  }
+                }, 200)
+              }}>我要發布領養訊息</Link>
             </>
           ) : (
             <>
               <div className="menu-heading">會員設定</div>
-              <Link to="/login" onClick={onClose}>登入</Link>
-              <Link to="/register" onClick={onClose}>註冊</Link>
+              <Link to="/login" onClick={() => {
+                onClose()
+                setTimeout(() => {
+                  const headerSlot = document.getElementById('header-logo-slot')
+                  if (headerSlot) {
+                    const currentPath = window.location.pathname
+                    const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+                    const currentWidth = window.innerWidth
+                    
+                    if (currentWidth <= 1200 || !isHomepage) {
+                      console.log('Navigation to login - forcing nav logo display')
+                      headerSlot.style.setProperty('display', 'flex', 'important')
+                    }
+                  }
+                }, 200)
+              }}>登入</Link>
+              <Link to="/register" onClick={() => {
+                onClose()
+                setTimeout(() => {
+                  const headerSlot = document.getElementById('header-logo-slot')
+                  if (headerSlot) {
+                    const currentPath = window.location.pathname
+                    const isHomepage = currentPath === '/' || currentPath === '/Purrfurry/' || currentPath.endsWith('/Purrfurry/')
+                    const currentWidth = window.innerWidth
+                    
+                    if (currentWidth <= 1200 || !isHomepage) {
+                      console.log('Navigation to register - forcing nav logo display')
+                      headerSlot.style.setProperty('display', 'flex', 'important')
+                    }
+                  }
+                }, 200)
+              }}>註冊</Link>
             </>
           )}
         </nav>

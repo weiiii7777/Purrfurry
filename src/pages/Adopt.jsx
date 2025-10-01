@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import LazyImage from '../components/LazyImage'
 import './Adopt.css'
 
 const asset = (p) => `${import.meta.env.BASE_URL}${p.replace(/^\//, '')}`
@@ -126,7 +127,7 @@ export default function Adopt() {
           <article key={a.id} className="adopt-card" role="button" onClick={() => navigate(`/adopt/${a.id}`)}>
             <div className="card-inner">
               <div className="media">
-                <img src={asset(a.image)} alt={a.name} />
+                <LazyImage src={a.image} alt={a.name} />
               </div>
               <div className="body">
                 <h4 className="name">{a.title}</h4>
